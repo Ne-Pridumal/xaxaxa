@@ -1,7 +1,8 @@
-import { CssBaseline } from '@mui/material';
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import { QuizPage, StudentPage } from '@/pages';
-import { Login, Register } from './Components';
+import { CssBaseline } from "@mui/material";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { QuizPage, StudentPage } from "@/pages";
+import { Login, Register } from "./Components";
+import { SnackbarProvider } from "notistack";
 
 const router = createBrowserRouter([
   {
@@ -9,7 +10,7 @@ const router = createBrowserRouter([
     element: <StudentPage />,
   },
   {
-    path: '/signin',
+    path: "/signin",
     element: <Login />,
   },
   {
@@ -17,7 +18,7 @@ const router = createBrowserRouter([
     element: <Register />,
   },
   {
-    path: '/quiz-page',
+    path: "/quiz-page",
     element: <QuizPage />,
   },
 ]);
@@ -25,8 +26,10 @@ const router = createBrowserRouter([
 function App() {
   return (
     <>
-      <RouterProvider router={router} />
-      <CssBaseline />
+      <SnackbarProvider>
+        <RouterProvider router={router} />
+        <CssBaseline />
+      </SnackbarProvider>
     </>
   );
 }
