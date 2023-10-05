@@ -19,8 +19,18 @@ type TAuthenticateUserResponse = {
   user:User;
 }
 
-async function authenticateUser(authData:TAuthenticateUserOptions) : Promise<TAuthenticateUserResponse>{
+async function authenticateUser(authData:TAuthenticateUserOptions) : Promise<TAuthenticateUserResponse> {
   return (await basicApi.post('/auth/local', authData)).data
+}
+
+type TRegisterUserOptions = {
+  username: string;
+  email:string;
+  password:string;
+}
+
+async function registerUser(userData:TRegisterUserOptions) : Promise<TAuthenticateUserResponse> {
+  return (await basicApi.post('/auth/local/register', userData)).data
 }
 
 // type TGetCurrentUserOptions = {
@@ -33,5 +43,6 @@ async function authenticateUser(authData:TAuthenticateUserOptions) : Promise<TAu
 
 export const authApi = {
   authenticateUser,
+  registerUser,
   // getCurrentUser
 }
