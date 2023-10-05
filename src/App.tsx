@@ -1,10 +1,12 @@
-import { CssBaseline } from '@mui/material';
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import { StudentPage } from './pages';
+import { CssBaseline } from "@mui/material";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { StudentPage } from "./pages";
+import { Login } from "./Components/login/Login";
+import { Register } from "./Components/signUp/Register";
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: <StudentPage />,
   },
   {
@@ -12,7 +14,7 @@ const router = createBrowserRouter([
     element: <Login />,
   },
   {
-    path:"/signup",
+    path: "/signup",
     element: <Register />,
   },
 ]);

@@ -1,6 +1,6 @@
 import { Box, Tab, Tabs, Typography } from '@mui/material';
-import { Header, TTaskCard, TaskCard } from '../../components';
 import { useMemo } from 'react';
+import { Header, TTaskCard, TaskCard } from '../../Components';
 
 function getTasks(): TTaskCard[] {
   const date = new Date();

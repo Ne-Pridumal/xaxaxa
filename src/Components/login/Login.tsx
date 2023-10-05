@@ -9,10 +9,32 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { Link } from "react-router-dom";
 
-const Login = () => {
+interface LoginData {
+  email: string;
+  password: string;
+}
+
+export const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState<LoginData>({
+    email: "",
+    password: "",
+  });
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = () => {
+    //  для обработки formData.email и т.д.
+    console.log("данные формы:", formData);
+  };
 
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>
@@ -40,21 +62,31 @@ const Login = () => {
                 variant="body2"
                 fontSize={16}
                 fontWeight={400}
-                sx={{ textDecoration: "underline" }}
+                sx={{ textDecoration: "underline", marginLeft: "5px" }}
                 component={Link}
-                to={"/"}
+                to={"/signup"}
               >
                 Регистрация
               </Typography>
             </SignUpBlock>
           </TopBlock>
           <Inputs>
-            <TextField label="Почта" variant="standard" size="medium" />
+            <TextField
+              label="Почта"
+              variant="standard"
+              size="medium"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
+            />
             <TextField
               type={showPassword ? "text" : "password"}
               label="Пароль"
               variant="standard"
               size="medium"
+              name="password"
+              value={formData.password}
+              onChange={handleInputChange}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -74,15 +106,16 @@ const Login = () => {
                 ),
               }}
             />
+            <Button
+              variant="contained"
+              size="large"
+              color="primary"
+              style={buttonStyle}
+              onClick={handleSubmit}
+            >
+              Войти
+            </Button>
           </Inputs>
-          <Button
-            variant="contained"
-            size="large"
-            color="primary"
-            style={buttonStyle}
-          >
-            Войти
-          </Button>
           <Politika>
             <Typography variant="subtitle2" fontWeight="500" fontSize={14}>
               <Typography
@@ -99,7 +132,9 @@ const Login = () => {
         </LeftWrapper>
       </LeftSide>
       <RightSide>
-        <img src="/public/logPic.png" alt="" />
+        <ImageContainer>
+          {/* <img src="/public/regPic.png" alt="" /> */}
+        </ImageContainer>
       </RightSide>
     </RegisterWrapper>
   );
@@ -111,6 +146,7 @@ const RegisterWrapper = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
 `;
 const LeftSide = styled.div`
   display: flex;
@@ -144,14 +180,19 @@ const Inputs = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 20%;
+  height: 23%;
   gap: 30px;
 `;
 const Politika = styled.div`
   text-align: center;
-  margin-top: 5%
+  margin-top: 5%;
 `;
 
 const RightSide = styled.div``;
 
-export default Login;
+const ImageContainer = styled.div`
+  width: 740px;
+  height: 100vh;
+  background-image: url(../public/logPic.png);
+  background-size: cover;
+`;

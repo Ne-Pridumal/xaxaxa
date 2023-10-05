@@ -15,7 +15,7 @@ interface RegisterData {
   confirmPassword: string;
 }
 
-const Register = () => {
+export const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState<RegisterData>({
     email: "",
@@ -41,6 +41,7 @@ const Register = () => {
 
   const handleSubmit = () => {
     //  для обработки formData.email и т.д.
+    console.log("данные формы:", formData);
   };
 
   const buttonStyle = {
@@ -63,9 +64,9 @@ const Register = () => {
                 variant="body2"
                 fontSize={16}
                 fontWeight={400}
-                sx={{ textDecoration: "underline" }}
+                sx={{ textDecoration: "underline", marginLeft: '5px' }}
                 component={Link}
-                to={"/login"}
+                to={"/signin"}
               >
                 Вход
               </Typography>
@@ -226,7 +227,7 @@ const Inputs = styled.form`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 30%;
+  height: 33%;
   gap: 30px;
 `;
 const Politika = styled.div`
@@ -241,5 +242,3 @@ const ImageContainer = styled.div`
   background-image: url(../public/regPic.png);
   background-size: cover;
 `;
-
-export default Register;
