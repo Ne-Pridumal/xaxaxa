@@ -1,13 +1,13 @@
-import { useState } from "react";
-import styled from "@emotion/styled";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import TextField from "@mui/material/TextField";
-import InputAdornment from "@mui/material/InputAdornment";
-import IconButton from "@mui/material/IconButton";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { Link } from "react-router-dom";
+import { useState } from 'react';
+import styled from '@emotion/styled';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
+import InputAdornment from '@mui/material/InputAdornment';
+import IconButton from '@mui/material/IconButton';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import { Link } from 'react-router-dom';
 
 interface LoginData {
   email: string;
@@ -21,7 +21,7 @@ export const Login = () => {
     password: "",
   });
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleClickShowPassword = () => setShowPassword(show => !show);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -37,13 +37,13 @@ export const Login = () => {
   };
 
   const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>
+    event: React.MouseEvent<HTMLButtonElement>,
   ) => {
     event.preventDefault();
   };
 
   const buttonStyle = {
-    backgroundColor: "#6B68FF",
+    backgroundColor: '#6B68FF',
   };
 
   return (
@@ -51,15 +51,15 @@ export const Login = () => {
       <LeftSide>
         <LeftWrapper>
           <TopBlock>
-            <Typography variant="h4" fontWeight="800">
+            <Typography variant='h4' fontWeight='800'>
               Вход в аккаунт
             </Typography>
             <SignUpBlock>
-              <Typography variant="body2" fontSize={16} fontWeight={400}>
+              <Typography variant='body2' fontSize={16} fontWeight={400}>
                 Нет аккаунта?
               </Typography>
               <Typography
-                variant="body2"
+                variant='body2'
                 fontSize={16}
                 fontWeight={400}
                 sx={{ textDecoration: "underline", marginLeft: "5px" }}
@@ -89,12 +89,12 @@ export const Login = () => {
               onChange={handleInputChange}
               InputProps={{
                 endAdornment: (
-                  <InputAdornment position="end">
+                  <InputAdornment position='end'>
                     <IconButton
-                      aria-label="toggle password visibility"
+                      aria-label='toggle password visibility'
                       onClick={handleClickShowPassword}
                       onMouseDown={handleMouseDownPassword}
-                      edge="end"
+                      edge='end'
                     >
                       {showPassword ? (
                         <VisibilityIcon />
@@ -117,13 +117,13 @@ export const Login = () => {
             </Button>
           </Inputs>
           <Politika>
-            <Typography variant="subtitle2" fontWeight="500" fontSize={14}>
+            <Typography variant='subtitle2' fontWeight='500' fontSize={14}>
               <Typography
                 fontSize={16}
                 fontWeight={400}
-                sx={{ textDecoration: "underline" }}
+                sx={{ textDecoration: 'underline' }}
                 component={Link}
-                to={"/forget"}
+                to={'/forget'}
               >
                 Не помню пароль
               </Typography>

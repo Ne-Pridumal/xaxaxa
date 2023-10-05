@@ -1,13 +1,13 @@
-import { useState } from "react";
-import styled from "@emotion/styled";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import TextField from "@mui/material/TextField";
-import InputAdornment from "@mui/material/InputAdornment";
-import IconButton from "@mui/material/IconButton";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { Link } from "react-router-dom";
+import { useState } from 'react';
+import styled from '@emotion/styled';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
+import InputAdornment from '@mui/material/InputAdornment';
+import IconButton from '@mui/material/IconButton';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import { Link } from 'react-router-dom';
 
 interface RegisterData {
   email: string;
@@ -18,15 +18,15 @@ interface RegisterData {
 export const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState<RegisterData>({
-    email: "",
-    password: "",
-    confirmPassword: "",
+    email: '',
+    password: '',
+    confirmPassword: '',
   });
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleClickShowPassword = () => setShowPassword(show => !show);
 
   const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>
+    event: React.MouseEvent<HTMLButtonElement>,
   ) => {
     event.preventDefault();
   };
@@ -45,7 +45,7 @@ export const Register = () => {
   };
 
   const buttonStyle = {
-    backgroundColor: "#6B68FF",
+    backgroundColor: '#6B68FF',
   };
 
   return (
@@ -53,15 +53,15 @@ export const Register = () => {
       <LeftSide>
         <LeftWrapper>
           <TopBlock>
-            <Typography variant="h4" fontWeight="800">
+            <Typography variant='h4' fontWeight='800'>
               Регистрация
             </Typography>
             <SignUpBlock>
-              <Typography variant="body2" fontSize={16} fontWeight={400}>
+              <Typography variant='body2' fontSize={16} fontWeight={400}>
                 Есть аккаунт?
               </Typography>
               <Typography
-                variant="body2"
+                variant='body2'
                 fontSize={16}
                 fontWeight={400}
                 sx={{ textDecoration: "underline", marginLeft: '5px' }}
@@ -72,32 +72,32 @@ export const Register = () => {
               </Typography>
             </SignUpBlock>
           </TopBlock>
-          
+
           <Inputs>
             <TextField
-              label="Почта"
-              variant="standard"
-              size="medium"
-              name="email"
+              label='Почта'
+              variant='standard'
+              size='medium'
+              name='email'
               value={formData.email}
               onChange={handleInputChange}
             />
             <TextField
-              type={showPassword ? "text" : "password"}
-              label="Пароль"
-              variant="standard"
-              size="medium"
-              name="password"
+              type={showPassword ? 'text' : 'password'}
+              label='Пароль'
+              variant='standard'
+              size='medium'
+              name='password'
               value={formData.password}
               onChange={handleInputChange}
               InputProps={{
                 endAdornment: (
-                  <InputAdornment position="end">
+                  <InputAdornment position='end'>
                     <IconButton
-                      aria-label="toggle password visibility"
+                      aria-label='toggle password visibility'
                       onClick={handleClickShowPassword}
                       onMouseDown={handleMouseDownPassword}
-                      edge="end"
+                      edge='end'
                     >
                       {showPassword ? (
                         <VisibilityIcon />
@@ -110,21 +110,21 @@ export const Register = () => {
               }}
             />
             <TextField
-              label="Повторите пароль"
-              type={showPassword ? "text" : "password"}
-              variant="standard"
-              size="medium"
-              name="confirmPassword"
+              label='Повторите пароль'
+              type={showPassword ? 'text' : 'password'}
+              variant='standard'
+              size='medium'
+              name='confirmPassword'
               value={formData.confirmPassword}
               onChange={handleInputChange}
               InputProps={{
                 endAdornment: (
-                  <InputAdornment position="end">
+                  <InputAdornment position='end'>
                     <IconButton
-                      aria-label="toggle password visibility"
+                      aria-label='toggle password visibility'
                       onClick={handleClickShowPassword}
                       onMouseDown={handleMouseDownPassword}
-                      edge="end"
+                      edge='end'
                     >
                       {showPassword ? (
                         <VisibilityIcon />
@@ -136,40 +136,40 @@ export const Register = () => {
                 ),
               }}
             />
-            
-          <Button
-            variant="contained"
-            size="large"
-            color="primary"
-            style={buttonStyle}
-            onClick={handleSubmit}
-          >
-            Регистрация
-          </Button>
+
+            <Button
+              variant='contained'
+              size='large'
+              color='primary'
+              style={buttonStyle}
+              onClick={handleSubmit}
+            >
+              Регистрация
+            </Button>
           </Inputs>
           <Politika>
-            <Typography variant="subtitle2" fontWeight="500" fontSize={14}>
-              Регистрируясь, вы соглашаетесь с{" "}
+            <Typography variant='subtitle2' fontWeight='500' fontSize={14}>
+              Регистрируясь, вы соглашаетесь с{' '}
               <Typography
-                variant="body2"
+                variant='body2'
                 fontSize={14}
                 fontWeight={500}
-                color="#555555"
-                sx={{ textDecoration: "underline" }}
+                color='#555555'
+                sx={{ textDecoration: 'underline' }}
                 component={Link}
-                to={"/terms"}
+                to={'/terms'}
               >
                 Условиями предоставления услуг
-              </Typography>{" "}
-              и{" "}
+              </Typography>{' '}
+              и{' '}
               <Typography
-                variant="body2"
+                variant='body2'
                 fontSize={14}
                 fontWeight={500}
-                color="#555555"
-                sx={{ textDecoration: "underline", color: "interhit" }}
+                color='#555555'
+                sx={{ textDecoration: 'underline', color: 'interhit' }}
                 component={Link}
-                to={"/politics"}
+                to={'/politics'}
               >
                 Политикой конфиденциальности
               </Typography>
