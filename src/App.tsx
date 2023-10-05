@@ -1,6 +1,8 @@
 import { CssBaseline } from '@mui/material';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { StudentPage } from './pages';
+import Login from '@components/login/Login';
+import Register from '@components/signUp/Register';
 
 const router = createBrowserRouter([
   {
@@ -8,11 +10,11 @@ const router = createBrowserRouter([
     element: <StudentPage />,
   },
   {
-    path: "/signin",
+    path: '/signin',
     element: <Login />,
   },
   {
-    path:"/signup",
+    path: '/signup',
     element: <Register />,
   },
 ]);
