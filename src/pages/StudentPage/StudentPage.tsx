@@ -12,7 +12,7 @@ function getTasks(): TTaskCard[] {
       publicationDate: date.toISOString(),
       title: 'Задание #1',
       questionsCount,
-      questionsDone: 1,
+      questionsDone: 12,
     },
     {
       deadlineDate: date.toISOString(),
