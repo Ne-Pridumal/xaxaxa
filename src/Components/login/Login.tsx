@@ -7,7 +7,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { Link, useNavigate  } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { authApi } from "@/api";
 import { useSnackbar } from "notistack";
 
@@ -18,7 +18,7 @@ interface LoginData {
 
 export const Login = () => {
   const { enqueueSnackbar } = useSnackbar();
-  const navigate  = useNavigate();
+  const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState<LoginData>({
@@ -37,20 +37,41 @@ export const Login = () => {
   };
 
   const handleSubmit = async () => {
+    const { email, password } = formData;
     //  для обработки formData.email и т.д.
+
+    if (!isValidEmail(email)) {
+      enqueueSnackbar("Введите корректный email", { variant: "error" });
+      return;
+    }
+
+    if (!isValidPassword(password)) {
+      enqueueSnackbar("Пароль должен содержать минимум 8 символов", {
+        variant: "error",
+      });
+      return;
+    }
+
     try {
       const response = await authApi.authenticateUser({
         identifier: formData.email,
         password: formData.password,
       });
       const { jwt } = response;
-      localStorage.setItem('jwtToken', jwt);
+      localStorage.setItem("jwtToken", jwt);
       enqueueSnackbar("Успешная авторизация", { variant: "success" });
-      navigate('/');
-    
+      navigate("/");
     } catch (error) {
       enqueueSnackbar("Ошибка при авторизации", { variant: "error" });
     }
+  };
+
+  const isValidEmail = (email: string) => {
+    return /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email);
+  };
+
+  const isValidPassword = (password: string) => {
+    return password.length >= 8;
   };
 
   const handleMouseDownPassword = (

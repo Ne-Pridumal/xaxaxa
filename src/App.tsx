@@ -26,7 +26,7 @@ const router = createBrowserRouter([
 function App() {
   return (
     <>
-      <SnackbarProvider>
+      <SnackbarProvider maxSnack={3}>
         <RouterProvider router={router} />
         <CssBaseline />
       </SnackbarProvider>
