@@ -7,6 +7,14 @@ const router = createBrowserRouter([
     path: '/',
     element: <StudentPage />,
   },
+  {
+    path: "/signin",
+    element: <Login />,
+  },
+  {
+    path:"/signup",
+    element: <Register />,
+  },
 ]);
 
 function App() {
