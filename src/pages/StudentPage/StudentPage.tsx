@@ -21,13 +21,14 @@ export const StudentPage = () => {
     }
   }, [userData, navigate]);
   const date = new Date();
-  const { data: tasks } = useQuery({
+  const { data: quizzes } = useQuery({
     queryKey: ['quizzes', userData?.id],
     queryFn: () =>
       quizzesApi.getQuizzesByGroup({ id: userData?.group.id, access_token }),
   });
 
   const [taskType, setTaskType] = useState<'open' | 'completed'>('open');
+
   return (
     <>
       <Header />
@@ -49,26 +50,30 @@ export const StudentPage = () => {
           </Tabs>
         </Box>
         <Box sx={{ mt: '20px', display: 'flex', gap: '20px' }}>
-          {tasks &&
-            tasks.data
-              .filter(task => {
-                const taskFinish = new Date(task.attributes.finishDate);
-                if (!task.attributes.finishDate) return true;
-                if (taskType === 'completed') return date < taskFinish;
-                if (taskType === 'open') return date > taskFinish;
-              })
-              .map(task => {
-                return (
-                  <TaskCard
-                    deadlineDate={task.attributes.finishDate}
-                    publicationDate={task.attributes.publishedAt}
-                    taskId={task.id}
-                    key={task.id}
-                    title={task.attributes.title}
-                    description={task.attributes.description}
-                  />
-                );
-              })}
+          {quizzes
+            ?.filter(quizz => {
+              const isClosed =
+                quizz.attributes.finishDate &&
+                new Date(quizz.attributes.finishDate) < date;
+              const isOpened =
+                !quizz.attributes.finishDate ||
+                new Date(quizz.attributes.finishDate) > date;
+              if (isOpened && taskType === 'open') return true;
+              if (isClosed && taskType === 'completed') return true;
+              return false;
+            })
+            .map(quizz => {
+              return (
+                <TaskCard
+                  key={quizz.id}
+                  finishDate={quizz.attributes.finishDate}
+                  publicationDate={quizz.attributes.publishedAt}
+                  title={quizz.attributes.title}
+                  description={quizz.attributes.description}
+                  quizId={quizz.id}
+                />
+              );
+            })}
         </Box>
       </Box>
     </>

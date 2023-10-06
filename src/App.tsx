@@ -58,7 +58,7 @@ const router = createBrowserRouter([
     }, // jwt !exists || jwt !valid => pass
   },
   {
-    path: '/quiz-page',
+    path: '/quiz/:id',
     element: <QuizPage />,
     async loader() {
       const access_token = localStorage.getItem('jwtToken');

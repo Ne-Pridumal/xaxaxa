@@ -1,27 +1,25 @@
-import { ResponseMeta, basicApi } from './basic';
+import { Quiz } from '@/types';
+import { basicApi } from './basic';
 import qs from 'qs';
 
-type TGetQuizzesResponse = {
-  meta:ResponseMeta,
-  data:{
-    id:number;
-    attributes:{
-      title:string;
-      description:string;
-      finishDate:string;
-      publishedAt:string;
-    }
-  }[]
-}
-
-async function getQuizzesByGroup({id, access_token}:{id?:number, access_token:string}) : Promise<TGetQuizzesResponse | undefined>{
+async function getQuizzesByGroup({id, access_token}:{id?:number, access_token?:string}) : Promise<Quiz[] | undefined>{
   if(id && access_token) {
     const searchParam = qs.stringify({populate:'*', filters:{ id:{ $eq:id } }})
-    return (await basicApi.get(`/groups?${searchParam}`, {headers:{
+    const {data} = (await basicApi.get(`/groups?${searchParam}`, {headers:{
       Authorization:`Bearer ${access_token}`
-    }})).data
+    }}))
+    return data.data?.at(0)?.attributes.quizzes.data
   }
 }
+
+async function getQuizById({id, access_token}:{ id?:number, access_token?:string }) : Promise<Quiz | undefined>{
+  if(id && access_token){
+    const searchParam = qs.stringify({ populate:'*', filters:{ id : { $eq : id} } })
+    const { data } = (await basicApi.get(`/quizzesp?${searchParam}`, {headers: {Authorization : `Bearer ${access_token}`}}))
+    return data.data?.at(0)?.attributes+++
+  }
+}
+
 
 export const quizzesApi = {
   getQuizzesByGroup

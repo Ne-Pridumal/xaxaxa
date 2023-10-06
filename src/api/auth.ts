@@ -1,23 +1,5 @@
+import { Answer, Group, User } from '@/types';
 import { basicApi } from './basic'
-
-type User = {
-    id:number;
-    username:string;
-    email:string;
-    provider:string;
-    confirmed:boolean;
-    blocked:boolean;
-  }
-
-type Group = {
-  id:number;
-  title:string;
-  uniqueId:string;
-}
-
-type Answer = {
-  id:string;
-}
 
 type TAuthenticateUserOptions = {
   identifier:string;

@@ -10,27 +10,23 @@ import {
 
 export type TTaskCard = {
   publicationDate: string;
-  deadlineDate: string;
-  taskId: number;
+  finishDate: string;
+  quizId: number;
   title: string;
   description: string;
+  isClosed?: boolean;
 };
 
-// const get_
-
 export const TaskCard = ({
-  deadlineDate,
+  finishDate,
   publicationDate,
-  taskId,
+  isClosed,
   description,
   title,
 }: TTaskCard) => {
-  // const {} = useQuery({ queryKey: ['quiz', taskId], queryFn: () => {} });
-
-  const questionsDone = Math.floor(Math.random() * 6);
+  const questionsDone = 0;
   const questionsCount = 12;
   const mark = questionsDone / questionsCount;
-  const isCompleted = false;
   const theme = useTheme();
   return (
     <Card
@@ -47,14 +43,10 @@ export const TaskCard = ({
           color={questionsDone > 0 ? theme.palette.success.main : 'primary'}
           fontSize={14}
         >
-          {!isCompleted && questionsDone > 0 && (
-            <>
-              В процессе {questionsDone}/{questionsCount}
-            </>
-          )}
-          {(isCompleted || questionsDone === 0) && (
-            <>Выложен: {publicationDate}</>
-          )}
+          {!isClosed &&
+            questionsDone > 0 &&
+            `В процессе ${questionsDone}/${questionsCount}`}
+          {(isClosed || questionsDone === 0) && `Выложен: ${publicationDate}`}
         </Typography>
         <Typography variant='h5' fontWeight={500} fontSize={20} mt='20px'>
           {title}
@@ -62,8 +54,8 @@ export const TaskCard = ({
         <Typography>{description}</Typography>
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '8px', mt: '20px' }}>
           <Chip label={`${questionsCount} заданий`} />
-          <Chip label={`Успеть до ${deadlineDate}`} />
-          {isCompleted && (
+          {finishDate && <Chip label={`Успеть до ${finishDate}`} />}
+          {isClosed && (
             <>
               {mark === 0 && <Chip label='Просрочено' color='error' />}
               {questionsDone / questionsCount >= 0.8 && (
