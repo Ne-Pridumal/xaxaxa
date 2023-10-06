@@ -46,7 +46,7 @@ export const QuizPage = () => {
       options: item.attributes.option.map((i: any) => ({
         clue: i.clue,
         title: i.title,
-        image: i.img.data.attributes.url,
+        image: i.img.data?.attributes.url ?? "",
       })),
     }));
   const optionsQuestions: TOptionsQuestions =
