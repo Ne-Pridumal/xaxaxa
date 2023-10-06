@@ -1,14 +1,12 @@
-import { CssBaseline } from "@mui/material";
+import { Login, Register } from './components';
+import { QuizPage, StatisticPage, StudentPage } from '@/pages';
+import { CssBaseline } from '@mui/material';
 import {
   RouterProvider,
   createBrowserRouter,
   redirect,
-} from "react-router-dom";
-import { QuizPage, StatisticPage, StudentPage } from "@/pages";
-import { SnackbarProvider } from "notistack";
-import { authApi } from "./api";
-import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
-import { Login, Register } from "./components";
+} from 'react-router-dom';
+import { authApi } from './api';
 
 const router = createBrowserRouter([
   {
@@ -93,16 +91,10 @@ const router = createBrowserRouter([
   },
 ]);
 
-const queryClient = new QueryClient();
-
 function App() {
   return (
     <>
-      <QueryClientProvider client={queryClient}>
-        <SnackbarProvider maxSnack={3}>
-          <RouterProvider router={router} />
-        </SnackbarProvider>
-      </QueryClientProvider>
+      <RouterProvider router={router} />
       <CssBaseline />
     </>
   );
