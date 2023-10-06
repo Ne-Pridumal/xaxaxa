@@ -10,6 +10,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { format } from "date-fns";
+import { useNavigate } from "react-router-dom";
 
 function createData(task: string, date: Date, score: string) {
   return { task, date, score };
@@ -24,6 +25,7 @@ const rows = [
 ];
 
 export const StatisticPage = () => {
+  const navigate = useNavigate();
   return (
     <>
       <Header />
@@ -37,7 +39,10 @@ export const StatisticPage = () => {
             gap: "8px",
           }}
         >
-          <IconButton color="primary">
+          <IconButton
+            onClick={() => navigate({ pathname: "/" })}
+            color="primary"
+          >
             <ArrowBackIosRounded />
           </IconButton>
           <Typography variant="h6" fontWeight={600}>
