@@ -1,16 +1,77 @@
+import { Login, Register } from "@/components";
+import { QuizPage, StudentPage } from "@/pages";
 import { CssBaseline } from "@mui/material";
-import { StudentPage } from "@pages/StudentPage";
-import { QuizPage } from "@pages/quiz-page";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import {
+  RouterProvider,
+  createBrowserRouter,
+  redirect,
+} from "react-router-dom";
+import { authApi } from "./api";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <StudentPage />,
+    async loader() {
+      const access_token = localStorage.getItem("jwtToken");
+      if (access_token) {
+        const currentUser = await authApi
+          .getCurrentUser({ access_token })
+          .catch(() => null);
+        if (currentUser) {
+          return null;
+        }
+      }
+      return redirect("/signin");
+    }, // jwt exists && jwt valid => pass
+  },
+  {
+    path: "/signin",
+    element: <Login />,
+    async loader() {
+      const access_token = localStorage.getItem("jwtToken");
+      if (access_token) {
+        const currentUser = await authApi
+          .getCurrentUser({ access_token })
+          .catch(() => null);
+        if (currentUser) {
+          return redirect("/");
+        }
+      }
+      return null;
+    }, // jwt !exists || jwt !valid => pass
+  },
+  {
+    path: "/signup",
+    element: <Register />,
+    async loader() {
+      const access_token = localStorage.getItem("jwtToken");
+      if (access_token) {
+        const currentUser = await authApi
+          .getCurrentUser({ access_token })
+          .catch(() => null);
+        if (currentUser) {
+          return redirect("/");
+        }
+      }
+      return null;
+    }, // jwt !exists || jwt !valid => pass
   },
   {
     path: "/quiz-page",
     element: <QuizPage />,
+    async loader() {
+      const access_token = localStorage.getItem("jwtToken");
+      if (access_token) {
+        const currentUser = await authApi
+          .getCurrentUser({ access_token })
+          .catch(() => null);
+        if (currentUser) {
+          return null;
+        }
+      }
+      return redirect("/signin");
+    }, // jwt exists && jwt valid => pass
   },
 ]);
 

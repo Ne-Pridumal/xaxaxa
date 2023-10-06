@@ -1,0 +1,1 @@
+export const apiUrl = 'https://s52kjzzv-1337.euw.devtunnels.ms/api'

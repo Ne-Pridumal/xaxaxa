@@ -21,13 +21,7 @@
     "noFallthroughCasesInSwitch": true,
     "baseUrl": ".",
     "paths": {
-      "@features/*": ["src/features/*"],
-      "@shared/*": ["src/shared/*"],
-      "@entities/*": ["src/entities/*"],
-      "@widgets/*": ["src/widgets/*"],
-      "@app/*": ["src/app/*"],
-      "@pages/*": ["src/pages/*"],
-      "@processes/*": ["src/processes/*"]
+      "@/*": ["src/*"],
     }
   },
   "include": ["src"],
