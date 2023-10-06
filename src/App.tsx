@@ -1,5 +1,5 @@
-import { Login, Register } from "@/components";
-import { QuizPage, StudentPage } from "@/pages";
+import { Login, Register } from "./components";
+import { QuizPage, StatisticPage, StudentPage } from "./pages";
 import { CssBaseline } from "@mui/material";
 import {
   RouterProvider,
@@ -60,6 +60,22 @@ const router = createBrowserRouter([
   {
     path: "/quiz-page",
     element: <QuizPage />,
+    async loader() {
+      const access_token = localStorage.getItem("jwtToken");
+      if (access_token) {
+        const currentUser = await authApi
+          .getCurrentUser({ access_token })
+          .catch(() => null);
+        if (currentUser) {
+          return null;
+        }
+      }
+      return redirect("/signin");
+    }, // jwt exists && jwt valid => pass
+  },
+  {
+    path: "/statistic-page",
+    element: <StatisticPage />,
     async loader() {
       const access_token = localStorage.getItem("jwtToken");
       if (access_token) {
