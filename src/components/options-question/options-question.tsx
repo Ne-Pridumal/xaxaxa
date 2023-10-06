@@ -1,7 +1,6 @@
-import { DragIndicator, Image } from "@mui/icons-material";
-import { Box, Chip, Typography } from "@mui/material";
-import { Option } from "./option";
-import { useState } from "react";
+import { Box, Button, TextField, Typography } from "@mui/material";
+import { ChangeEvent, useState } from "react";
+import { Image } from "@mui/icons-material";
 
 const taskArray = [
   {
@@ -22,47 +21,55 @@ const taskArray = [
   },
 ];
 
-type TOptions = {
-  questions: {
-    answer: string;
-    correctAnswer: string;
-    image: string;
-  }[];
-  answers: {
-    answer: string;
-  }[];
+type TQuestion = {
+  image: string;
+  answer: string;
+  correctAnswer: string;
+  currentAnswer: string;
 };
 
 export const OptionsQuestion = () => {
-  const [options, setOptions] = useState<TOptions>({
-    questions: taskArray.map((item) => ({
+  const [questions, setQuestions] = useState<TQuestion[]>(
+    taskArray.map((item) => ({
       image: item.image,
       answer: "",
       correctAnswer: item.answer,
-    })),
-    answers: taskArray.map((item) => ({ answer: item.answer })),
-  });
+      currentAnswer: "",
+    }))
+  );
+  const [showAnswer, setShowAnswer] = useState(false);
+  const setAnswer = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    index: string
+  ) => {
+    setQuestions((prevValue) =>
+      prevValue.map((item) => {
+        if (item.correctAnswer === index) {
+          return {
+            ...item,
+            currentAnswer: e.target.value,
+          };
+        }
+        return item;
+      })
+    );
+  };
 
-  const moveAnswer = (dragIndex: string, hoverIndex: string) => {
-    setOptions((prevOptions) => {
-      return {
-        questions: prevOptions.questions.map((item) => ({
-          image: item.image,
-          answer: dragIndex,
-          correctAnswer: item.correctAnswer,
-        })),
-        answers: prevOptions.answers.filter(
-          (item) => item.answer !== dragIndex
-        ),
-      };
-    });
+  const checkAnswers = () => {
+    setQuestions((prev) =>
+      prev.map((item) => ({
+        ...item,
+        answer: item.currentAnswer,
+      }))
+    );
+    console.log(questions);
+    setShowAnswer(true);
   };
 
   return (
     <Box sx={{ pt: "48px" }}>
       <Typography variant="h6" mb={"20px"}>
-        Выбери и соотнеси правильные комбинации «топографический знак» —
-        «обозначение»
+        Напиши правильные названия топографических знаков
       </Typography>
       <Box
         sx={{
@@ -72,15 +79,25 @@ export const OptionsQuestion = () => {
           gap: "20px",
         }}
       >
-        {options.questions.map((item, index) => (
+        {questions.map((item) => (
           <Box
             sx={{
               display: "flex",
               alignItems: "center",
               gap: "16px",
-              border: "1px solid #E0E0E0",
+              border: "1px solid ",
               borderRadius: "4px",
               padding: "12px 24px 12px 16px",
+              background: !showAnswer
+                ? "transparent"
+                : item.correctAnswer === item.answer
+                  ? "#64CF6F14"
+                  : "#E94E7C14",
+              borderColor: !showAnswer
+                ? "#E0E0E0"
+                : item.correctAnswer === item.answer
+                  ? "#1EAA2C"
+                  : "#D6295D",
             }}
           >
             <Image sx={{ height: "64px", width: "96px" }} />
@@ -91,51 +108,32 @@ export const OptionsQuestion = () => {
                 height: "100%",
               }}
             >
-              <Box
+              <TextField
+                id="sdf"
+                label="Ответ"
+                variant="standard"
+                onChange={(e) => setAnswer(e, item.correctAnswer)}
                 sx={{
-                  position: "absolute",
-                  bottom: "16px",
                   left: 0,
                   width: "100%",
-                  height: "1px",
-                  background: "#BABABA",
+                  height: "100%",
                 }}
-              >
-                {item.answer && (
-                  <Option
-                    moveAnswer={moveAnswer}
-                    label={item.answer}
-                    id={item.answer}
-                    key={item.answer}
-                  />
-                )}
-              </Box>
+                disabled={item.answer === item.correctAnswer}
+              />
             </Box>
           </Box>
         ))}
       </Box>
-
-      <Box sx={{ mt: "24px" }}>
-        <Typography variant="h6" mb="12px">
-          Варианты ответов
-        </Typography>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            gap: "12px",
-          }}
-        >
-          {options.answers.map((item, index) => (
-            <Option
-              moveAnswer={moveAnswer}
-              label={item.answer}
-              id={item.answer}
-              key={item.answer}
-            />
-          ))}
-        </Box>
-      </Box>
+      <Button
+        color="primary"
+        variant="contained"
+        type="button"
+        onClick={checkAnswers}
+        sx={{ mt: "32px" }}
+        size="large"
+      >
+        Проверить ответы
+      </Button>
     </Box>
   );
 };
