@@ -4,6 +4,7 @@ import { OptionsQuestion } from "../../components/options-question";
 import { ImageQuestion } from "../../components/image-question";
 import { quizzesApi } from "@/api";
 import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
 type TImageQuestions = {
   question: string;
@@ -25,6 +26,7 @@ type TOptionsQuestions = {
 }[];
 
 export const QuizPage = () => {
+  const navigate = useNavigate();
   const { data, isError, isLoading } = useQuery({
     queryKey: ["get-quizz"],
     queryFn: () =>
@@ -55,7 +57,6 @@ export const QuizPage = () => {
         image: "",
       })),
     }));
-  console.log(data!.data[0].attributes);
   return (
     <Box sx={{ padding: "20px 80px 80px 80px" }}>
       <Box
@@ -67,7 +68,7 @@ export const QuizPage = () => {
           gap: "8px",
         }}
       >
-        <IconButton color="primary">
+        <IconButton onClick={() => navigate({ pathname: "/" })} color="primary">
           <ArrowBackIosRounded />
         </IconButton>
         <Typography variant="h6" fontWeight={600}>
