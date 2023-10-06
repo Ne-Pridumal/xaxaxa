@@ -7,12 +7,72 @@ import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { authApi } from "@/api";
+import { useSnackbar } from "notistack";
 
-const Login = () => {
+interface LoginData {
+  email: string;
+  password: string;
+}
+
+export const Login = () => {
+  const { enqueueSnackbar } = useSnackbar();
+  const navigate = useNavigate();
+
   const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState<LoginData>({
+    email: "",
+    password: "",
+  });
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = async () => {
+    const { email, password } = formData;
+    //  для обработки formData.email и т.д.
+
+    if (!isValidEmail(email)) {
+      enqueueSnackbar("Введите корректный email", { variant: "error" });
+      return;
+    }
+
+    if (!isValidPassword(password)) {
+      enqueueSnackbar("Пароль должен содержать минимум 8 символов", {
+        variant: "error",
+      });
+      return;
+    }
+
+    try {
+      const response = await authApi.authenticateUser({
+        identifier: formData.email,
+        password: formData.password,
+      });
+      const { jwt } = response;
+      localStorage.setItem("jwtToken", jwt);
+      enqueueSnackbar("Успешная авторизация", { variant: "success" });
+      navigate("/");
+    } catch (error) {
+      enqueueSnackbar("Ошибка при авторизации", { variant: "error" });
+    }
+  };
+
+  const isValidEmail = (email: string) => {
+    return /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email);
+  };
+
+  const isValidPassword = (password: string) => {
+    return password.length >= 8;
+  };
 
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>
@@ -40,21 +100,31 @@ const Login = () => {
                 variant="body2"
                 fontSize={16}
                 fontWeight={400}
-                sx={{ textDecoration: "underline" }}
+                sx={{ textDecoration: "underline", marginLeft: "5px" }}
                 component={Link}
-                to={"/"}
+                to={"/signup"}
               >
                 Регистрация
               </Typography>
             </SignUpBlock>
           </TopBlock>
           <Inputs>
-            <TextField label="Почта" variant="standard" size="medium" />
+            <TextField
+              label="Почта"
+              variant="standard"
+              size="medium"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
+            />
             <TextField
               type={showPassword ? "text" : "password"}
               label="Пароль"
               variant="standard"
               size="medium"
+              name="password"
+              value={formData.password}
+              onChange={handleInputChange}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -74,15 +144,16 @@ const Login = () => {
                 ),
               }}
             />
+            <Button
+              variant="contained"
+              size="large"
+              color="primary"
+              style={buttonStyle}
+              onClick={handleSubmit}
+            >
+              Войти
+            </Button>
           </Inputs>
-          <Button
-            variant="contained"
-            size="large"
-            color="primary"
-            style={buttonStyle}
-          >
-            Войти
-          </Button>
           <Politika>
             <Typography variant="subtitle2" fontWeight="500" fontSize={14}>
               <Typography
@@ -99,7 +170,9 @@ const Login = () => {
         </LeftWrapper>
       </LeftSide>
       <RightSide>
-        <img src="/public/logPic.png" alt="" />
+        <ImageContainer>
+          {/* <img src="/public/regPic.png" alt="" /> */}
+        </ImageContainer>
       </RightSide>
     </RegisterWrapper>
   );
@@ -111,6 +184,7 @@ const RegisterWrapper = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
 `;
 const LeftSide = styled.div`
   display: flex;
@@ -144,14 +218,19 @@ const Inputs = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 20%;
+  height: 23%;
   gap: 30px;
 `;
 const Politika = styled.div`
   text-align: center;
-  margin-top: 5%
+  margin-top: 5%;
 `;
 
 const RightSide = styled.div``;
 
-export default Login;
+const ImageContainer = styled.div`
+  width: 740px;
+  height: 100vh;
+  background-image: url(../public/logPic.png);
+  background-size: cover;
+`;
