@@ -10,20 +10,65 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { format } from "date-fns";
+import { quizzesApi } from "@/api";
+import { useQuery } from "@tanstack/react-query";
 
 function createData(task: string, date: Date, score: string) {
   return { task, date, score };
 }
 
-const rows = [
-  createData("Задание1", new Date("2023-10-04"), "12 / 12"),
-  createData("Задание2", new Date("2023-10-04"), "30 / 36"),
-  createData("Задание3", new Date("2023-10-04"), "12 / 12"),
-  createData("Задание4", new Date("2023-10-04"), "12 / 12"),
-  createData("Задание5", new Date("2023-10-04"), "12 / 12"),
-];
+interface QuizData {
+  id: number;
+  attributes: {
+    title: string;
+    finishDate: string;
+    map_questions: {
+      data: Array<any>;
+    };
+    relation_questions: {
+      data: Array<any>;
+    };
+  };
+}
 
 export const StatisticPage = () => {
+  const {
+    data: responseData,
+    isError,
+    isLoading,
+  } = useQuery<QuizData[]>({
+    queryKey: ["get-all-quizes"],
+    queryFn: () =>
+      quizzesApi.getAllQuizes({
+        access_token: window.localStorage.getItem("jwtToken")!,
+      }),
+  });
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (isError) {
+    return <div>Error loading data</div>;
+  }
+
+  if (!Array.isArray(responseData)) {
+    return <div>Data is not an array</div>;
+  }
+  console.log(responseData);
+
+  const rows = responseData.map((quiz) => {
+    const mapQuestionsCount = quiz.attributes.map_questions.data.length;
+    const relationQuestionsCount = quiz.attributes.relation_questions.data.length;
+    const totalQuestions = mapQuestionsCount + relationQuestionsCount;
+
+    return createData(
+      quiz.attributes.title,
+      new Date(quiz.attributes.finishDate),
+      `${totalQuestions} / ${totalQuestions}`
+    );
+  });
+
   return (
     <>
       <Header />

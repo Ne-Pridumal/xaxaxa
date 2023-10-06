@@ -36,19 +36,6 @@ async function getQuizzesByGroup({
   }
 }
 
-type TGetFullQuizInfo = {
-  meta: ResponseMeta;
-  data: {
-    id: number;
-    attributes: {
-      title: string;
-      description: string;
-      finishDate: string;
-      publishedAt: string;
-    };
-  }[];
-};
-
 const getQuizById = async ({
   id,
   access_token,
@@ -68,7 +55,25 @@ const getQuizById = async ({
   return data;
 };
 
+const getAllQuizes = async ({
+  access_token,
+}: {
+  access_token: string;
+}): Promise<any> => {
+  const { data } = await basicApi.get(
+    `/quizzesp?populate[map_questions][populate][option][populate]=*&populate[relation_questions][populate]=*&populate[map_questions][populate]=*&populate=*`,
+    {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+    }
+  );
+
+  return data;
+};
+
 export const quizzesApi = {
   getQuizzesByGroup,
   getQuizById,
+  getAllQuizes,
 };
