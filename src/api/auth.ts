@@ -33,16 +33,16 @@ async function registerUser(userData:TRegisterUserOptions) : Promise<TAuthentica
   return (await basicApi.post('/auth/local/register', userData)).data
 }
 
-// type TGetCurrentUserOptions = {
+type TGetCurrentUserOptions = {
+  access_token:string;
+}
 
-// }
-
-// async function getCurrentUser(userData:TGetCurrentUserOptions) : Promise<User>{
-//   return {}
-// }
+async function getCurrentUser({ access_token }:TGetCurrentUserOptions) : Promise<User>{
+  return (await basicApi.get('/users/me', {headers:{Authorization:`Bearer ${access_token}`}})).data
+}
 
 export const authApi = {
   authenticateUser,
   registerUser,
-  // getCurrentUser
+  getCurrentUser
 }

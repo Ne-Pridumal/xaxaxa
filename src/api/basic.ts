@@ -10,4 +10,4 @@ export type ResponseMeta = {
   };
 }
 
-export const basicApi = axios.create({ baseURL:apiUrl, withCredentials:true })
+export const basicApi = axios.create({ baseURL:apiUrl, withCredentials:false })
