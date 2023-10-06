@@ -19,6 +19,7 @@ export const StudentPage = () => {
   if (quizzesLoading) {
     return <div>loading</div>;
   }
+  console.log(quizzes);
   return (
     <>
       <Header />
@@ -40,7 +41,7 @@ export const StudentPage = () => {
           </Tabs>
         </Box>
         <Box sx={{ mt: "20px", display: "flex", gap: "20px" }}>
-          {quizzes
+          {quizzes?.data
             ?.filter((quizz) => {
               const isClosed =
                 quizz.attributes.finishDate &&

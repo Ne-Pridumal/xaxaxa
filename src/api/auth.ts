@@ -1,4 +1,4 @@
-import { Answer, Group, User } from "@/types";
+import { Answer, Group, User } from "../types/index";
 import { basicApi } from "./basic";
 
 type TAuthenticateUserOptions = {

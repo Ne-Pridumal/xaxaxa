@@ -1,4 +1,5 @@
-import { QuizPage, StatisticPage, StudentPage } from "@/pages";
+import { Login, Register } from "./components";
+import { QuizPage, StatisticPage, StudentPage } from "./pages";
 import { CssBaseline } from "@mui/material";
 import {
   RouterProvider,
@@ -6,8 +7,6 @@ import {
   redirect,
 } from "react-router-dom";
 import { authApi } from "./api";
-import { Login } from "./components";
-import { Register } from "./components/Register";
 
 const router = createBrowserRouter([
   {
