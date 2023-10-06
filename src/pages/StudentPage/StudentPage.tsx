@@ -28,6 +28,7 @@ function getTasks(): TTaskCard[] {
 
 export const StudentPage = () => {
   const tasks = useMemo(() => getTasks(), []);
+  // const tasks = use
   return (
     <>
       <Header />

@@ -14,7 +14,7 @@ export const Header = () => {
           textTransform='uppercase'
           fontWeight={500}
           component={Link}
-          to={'/'}
+          to='/'
           sx={{ textDecoration: 'none', color: 'initial' }}
         >
           Brand
