@@ -9,26 +9,26 @@ import {
 } from "@mui/material";
 
 import { Box } from "@mui/material";
-import { FormEvent, useId, useState } from "react";
+import { useId, useState } from "react";
 
-const imageQuestion = {
-  image: "",
-  options: [
-    { image: "", answer: "a" },
-    { image: "", answer: "b" },
-    { image: "", answer: "c" },
-    { image: "", answer: "d" },
-  ],
-  correctAnswer: "b",
+export type TImageQuestion = {
+  image: string;
+  options: {
+    image: string;
+    title: string;
+  }[];
+  correctAnswer: string;
 };
 
-export type TMapQuestion = {};
-
-export const ImageQuestion = () => {
+export const ImageQuestion = ({
+  options,
+  image,
+  correctAnswer,
+}: TImageQuestion) => {
   const id = useId();
   const [questions, setQuestions] = useState({
-    image: imageQuestion.image,
-    correctAnswer: imageQuestion.correctAnswer,
+    image: image,
+    correctAnswer: correctAnswer,
     currentAnswer: "",
   });
   const [activeAnswer, setActiveAnswer] = useState("");
@@ -59,7 +59,6 @@ export const ImageQuestion = () => {
         />
         <FormControl sx={{ height: "100%" }} id={id}>
           <RadioGroup
-            defaultValue={imageQuestion.options[0].answer}
             sx={{
               height: "100%",
               display: "flex",
@@ -67,10 +66,11 @@ export const ImageQuestion = () => {
               justifyContent: "space-between",
             }}
           >
-            {imageQuestion.options.map((item) => (
+            {options.map((item) => (
               <FormControlLabel
-                value={item.answer}
-                htmlFor={item.answer}
+                key={item.title}
+                value={item.title}
+                htmlFor={item.title}
                 aria-labelledby="image-answer"
                 sx={{
                   display: "flex",
@@ -81,14 +81,14 @@ export const ImageQuestion = () => {
                   padding: "12px 24px 12px 16px",
                   background: !showAnswer
                     ? "transparent"
-                    : item.answer === questions.currentAnswer
+                    : item.title === questions.currentAnswer
                       ? questions.currentAnswer === questions.correctAnswer
                         ? "#64CF6F14"
                         : "#E94E7C14"
                       : "transparent",
                   borderColor: !showAnswer
                     ? "#E0E0E0"
-                    : item.answer === questions.currentAnswer
+                    : item.title === questions.currentAnswer
                       ? questions.currentAnswer === questions.correctAnswer
                         ? "#1EAA2C"
                         : "#D6295D"
@@ -104,14 +104,14 @@ export const ImageQuestion = () => {
                       disabled={
                         questions.currentAnswer === questions.correctAnswer
                       }
-                      id={item.answer}
-                      value={item.answer}
-                    />{" "}
-                    {item.answer}
+                      id={item.title}
+                      value={item.title}
+                    />
+                    {item.title}
                   </Box>
                 }
                 onChange={() => {
-                  setActiveAnswer(item.answer);
+                  setActiveAnswer(item.title);
                 }}
               />
             ))}

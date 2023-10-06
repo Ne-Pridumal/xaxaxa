@@ -21,16 +21,23 @@ const taskArray = [
   },
 ];
 
+type TOptionsQuestion = {
+  options: {
+    image: string;
+    answer: string;
+    clue: string;
+  }[];
+};
+
 type TQuestion = {
-  image: string;
   answer: string;
   correctAnswer: string;
   currentAnswer: string;
 };
 
-export const OptionsQuestion = () => {
+export const OptionsQuestion = ({ options }: TOptionsQuestion) => {
   const [questions, setQuestions] = useState<TQuestion[]>(
-    taskArray.map((item) => ({
+    options.map((item) => ({
       image: item.image,
       answer: "",
       correctAnswer: item.answer,
@@ -62,7 +69,6 @@ export const OptionsQuestion = () => {
         answer: item.currentAnswer,
       }))
     );
-    console.log(questions);
     setShowAnswer(true);
   };
 
@@ -79,8 +85,9 @@ export const OptionsQuestion = () => {
           gap: "20px",
         }}
       >
-        {questions.map((item) => (
+        {questions.map((item, index) => (
           <Box
+            key={index}
             sx={{
               display: "flex",
               alignItems: "center",

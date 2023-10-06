@@ -2,10 +2,62 @@ import { ArrowBackIosRounded, Image } from "@mui/icons-material";
 import { Box, Chip, IconButton, Typography } from "@mui/material";
 import { OptionsQuestion } from "../../components/options-question";
 import { ImageQuestion } from "../../components/image-question";
+import { quizzesApi } from "@/api";
+import { useQuery } from "@tanstack/react-query";
+
+type TImageQuestions = {
+  question: string;
+  rightChoice: string;
+  image: string;
+  options: {
+    clue: string;
+    title: string;
+    image: string;
+  }[];
+}[];
+
+type TOptionsQuestions = {
+  options: {
+    answer: string;
+    clue: string;
+    image: string;
+  }[];
+}[];
 
 export const QuizPage = () => {
+  const { data, isError, isLoading } = useQuery({
+    queryKey: ["get-quizz"],
+    queryFn: () =>
+      quizzesApi.getQuizById({
+        id: 1,
+        access_token: window.localStorage.getItem("jwtToken")!,
+      }),
+  });
+  if (isLoading || isError) {
+    return null;
+  }
+  const imageQuestions: TImageQuestions =
+    data!.data[0].attributes.map_questions.data.map((item: any) => ({
+      question: item.attributes.question,
+      rightChoice: item.attributes.rightChoice,
+      image: "",
+      options: item.attributes.option.map((i: any) => ({
+        clue: i.clue,
+        title: i.title,
+        image: i.img.data.attributes.url,
+      })),
+    }));
+  const optionsQuestions: TOptionsQuestions =
+    data!.data[0].attributes.relation_questions.data.map((i: any) => ({
+      options: i.attributes.option.map((item: any) => ({
+        answer: item.answer,
+        clue: item.clue,
+        image: "",
+      })),
+    }));
+  console.log(data!.data[0].attributes);
   return (
-    <Box sx={{ padding: "20px 80px 0 80px" }}>
+    <Box sx={{ padding: "20px 80px 80px 80px" }}>
       <Box
         sx={{
           borderBottom: "1px solid #E0E0E0",
@@ -19,7 +71,7 @@ export const QuizPage = () => {
           <ArrowBackIosRounded />
         </IconButton>
         <Typography variant="h6" fontWeight={600}>
-          Задание #1
+          {data!.data[0].attributes.title}
         </Typography>
       </Box>
       <Box sx={{ pt: "20px", pb: "40px", borderBottom: "1px solid #E0E0E0" }}>
@@ -35,11 +87,7 @@ export const QuizPage = () => {
             }}
           >
             <Typography color={"#00000099"} variant="body1">
-              Не следует, однако, забывать, что убеждённость некоторых
-              оппонентов позволяет оценить. Высокий уровень вовлечения
-              представителей целевой аудитории является четким доказательством
-              простого факта: консультация с широким активом влечет за собой
-              процесс внедрения и модернизации стандартных подходов.
+              {data!.data[0].attributes.description}
             </Typography>
             <Box
               sx={{
@@ -49,7 +97,15 @@ export const QuizPage = () => {
                 gap: "8px",
               }}
             >
-              <Chip label="12 заданий" /> <Chip label="Успеть до 12 октября" />
+              <Chip
+                label={`${imageQuestions.length + optionsQuestions.length
+                  } заданий`}
+              />
+              <Chip
+                label={`Успеть до ${new Date(
+                  data!.data[0].attributes.finishDate
+                ).toLocaleDateString()}`}
+              />
             </Box>
           </Box>
         </Box>
@@ -60,8 +116,18 @@ export const QuizPage = () => {
           width: "100%",
         }}
       >
-        <OptionsQuestion />
-        <ImageQuestion />
+        {optionsQuestions.map((item) => {
+          return <OptionsQuestion options={item.options} />;
+        })}
+        {imageQuestions.map((item) => {
+          return (
+            <ImageQuestion
+              options={item.options}
+              image={item.image}
+              correctAnswer={item.rightChoice}
+            />
+          );
+        })}
       </Box>
     </Box>
   );
