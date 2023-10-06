@@ -1,12 +1,12 @@
-import { Login, Register } from './components';
-import { QuizPage, StatisticPage, StudentPage } from '@/pages';
-import { CssBaseline } from '@mui/material';
+import { Login, Register } from "./components";
+import { QuizPage, StatisticPage, StudentPage } from "./pages";
+import { CssBaseline } from "@mui/material";
 import {
   RouterProvider,
   createBrowserRouter,
   redirect,
-} from 'react-router-dom';
-import { authApi } from './api';
+} from "react-router-dom";
+import { authApi } from "./api";
 
 const router = createBrowserRouter([
   {
