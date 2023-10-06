@@ -10,7 +10,13 @@ type User = {
   }
 
 type Group = {
-  
+  id:number;
+  title:string;
+  uniqueId:string;
+}
+
+type Answer = {
+  id:string;
 }
 
 type TAuthenticateUserOptions = {
@@ -23,7 +29,8 @@ type TAuthenticateUserResponse = {
   user:User;
 }
 
-async function authenticateUser(authData:TAuthenticateUserOptions) : Promise<TAuthenticateUserResponse> {
+async function authenticateUser(authData:TAuthenticateUserOptions) : 
+  Promise<TAuthenticateUserResponse> {
   return (await basicApi.post('/auth/local', authData)).data
 }
 
@@ -33,7 +40,8 @@ type TRegisterUserOptions = {
   password:string;
 }
 
-async function registerUser(userData:TRegisterUserOptions) : Promise<TAuthenticateUserResponse> {
+async function registerUser(userData:TRegisterUserOptions) : 
+  Promise<TAuthenticateUserResponse> {
   return (await basicApi.post('/auth/local/register', userData)).data
 }
 
@@ -41,8 +49,10 @@ type TGetCurrentUserOptions = {
   access_token?:string;
 }
 
-async function getCurrentUser({ access_token }:TGetCurrentUserOptions) : Promise<User | undefined>{
-  if(access_token) return (await basicApi.get('/users/me?populate=', {headers:{Authorization:`Bearer ${access_token}`}})).data
+async function getCurrentUser({ access_token }:TGetCurrentUserOptions) : 
+  Promise<User & { group: Group, answer:Answer } | undefined>{
+  if(access_token) return (await basicApi.get('/users/me?populate=*', 
+    {headers:{Authorization:`Bearer ${access_token}`}})).data
 }
 
 export const authApi = {
