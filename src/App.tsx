@@ -1,6 +1,7 @@
 import { CssBaseline } from "@mui/material";
+import { StudentPage } from "@pages/StudentPage";
+import { QuizPage } from "@pages/quiz-page";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { QuizPage, StudentPage } from "./pages";
 
 const router = createBrowserRouter([
   {
