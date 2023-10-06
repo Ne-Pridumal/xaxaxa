@@ -16,11 +16,13 @@
     "@mui/material": "^5.14.12",
     "@tanstack/react-query": "^4.35.7",
     "axios": "^1.5.1",
+    "date-fns": "^2.30.0",
     "notistack": "^3.0.1",
     "qs": "^6.11.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.16.0"
+    "react-router-dom": "^6.16.0",
+    "vite-plugin-svgr": "^4.1.0"
   },
   "devDependencies": {
     "@types/node": "^20.8.2",
