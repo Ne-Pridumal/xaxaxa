@@ -1,35 +1,36 @@
 import {
+  Box,
   Card,
   CardContent,
   CardMedia,
-  Typography,
   Chip,
-  Box,
+  Typography,
   useTheme,
 } from '@mui/material';
 
-type Task = {
+export type TTaskCard = {
   publicationDate: string;
   deadlineDate: string;
+  taskId: number;
   title: string;
-  description?: string;
-  questionsCount: number;
-  questionsDone: number;
-  isCompleted?: boolean;
+  description: string;
 };
 
-export type TTaskCard = Task;
+// const get_
 
 export const TaskCard = ({
   deadlineDate,
   publicationDate,
-  questionsCount,
-  questionsDone,
-  title,
+  taskId,
   description,
-  isCompleted,
+  title,
 }: TTaskCard) => {
+  // const {} = useQuery({ queryKey: ['quiz', taskId], queryFn: () => {} });
+
+  const questionsDone = Math.floor(Math.random() * 6);
+  const questionsCount = 12;
   const mark = questionsDone / questionsCount;
+  const isCompleted = false;
   const theme = useTheme();
   return (
     <Card

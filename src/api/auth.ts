@@ -9,6 +9,10 @@ type User = {
     blocked:boolean;
   }
 
+type Group = {
+  
+}
+
 type TAuthenticateUserOptions = {
   identifier:string;
   password:string;
@@ -34,11 +38,11 @@ async function registerUser(userData:TRegisterUserOptions) : Promise<TAuthentica
 }
 
 type TGetCurrentUserOptions = {
-  access_token:string;
+  access_token?:string;
 }
 
-async function getCurrentUser({ access_token }:TGetCurrentUserOptions) : Promise<User>{
-  return (await basicApi.get('/users/me', {headers:{Authorization:`Bearer ${access_token}`}})).data
+async function getCurrentUser({ access_token }:TGetCurrentUserOptions) : Promise<User | undefined>{
+  if(access_token) return (await basicApi.get('/users/me?populate=', {headers:{Authorization:`Bearer ${access_token}`}})).data
 }
 
 export const authApi = {

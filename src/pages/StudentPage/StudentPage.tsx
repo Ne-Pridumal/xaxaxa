@@ -1,40 +1,31 @@
+import { authApi, quizzesApi } from '@/api';
+import { Header, TaskCard } from '@/components';
 import { Box, Tab, Tabs, Typography } from '@mui/material';
-import { useMemo, useState } from 'react';
-import { Header, TTaskCard, TaskCard } from '@/components';
 import { useQuery } from '@tanstack/react-query';
-import { quizzesApi } from '@/api';
-
-function getTasks(): TTaskCard[] {
-  const date = new Date();
-  const questionsCount = 12;
-  const questionsDone = 0;
-  return [
-    {
-      deadlineDate: date.toISOString(),
-      publicationDate: date.toISOString(),
-      title: 'Задание #1',
-      questionsCount,
-      questionsDone: 12,
-    },
-    {
-      deadlineDate: date.toISOString(),
-      publicationDate: date.toISOString(),
-      title: 'Задание #2',
-      description:
-        'Не следует, однако, забывать, что убеждённость некоторых оппонентов позволяет оценить.',
-      questionsCount,
-      questionsDone,
-    },
-  ];
-}
+import { useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const StudentPage = () => {
-  const tasks = useMemo(() => getTasks(), []);
-  const date = new Date();
-  const { data: newTasks } = useQuery({
-    queryKey: ['quizzes'],
-    queryFn: () => quizzesApi.getQuizzes(),
+  const navigate = useNavigate();
+  const access_token = useMemo(
+    () => localStorage.getItem('jwtToken'),
+    [],
+  ) as string;
+  const { data: userData } = useQuery({
+    queryKey: ['auth'],
+    queryFn: () => authApi.getCurrentUser({ access_token }),
   });
+  useEffect(() => {
+    if (!userData) {
+      navigate('/signin');
+    }
+  }, [userData, navigate]);
+  const date = new Date();
+  const { data: tasks } = useQuery({
+    queryKey: ['quizzes', userData?.id],
+    queryFn: () => quizzesApi.getQuizzesByUser(userData?.id),
+  });
+
   const [taskType, setTaskType] = useState<'open' | 'completed'>('open');
   return (
     <>
@@ -51,21 +42,31 @@ export const StudentPage = () => {
           </Typography>
         </Box>
         <Box sx={{ my: '20px' }}>
-          <Tabs value={0} onChange={console.log}>
-            <Tab label='Открытые' />
-            <Tab label='Завершенные' />
+          <Tabs value={taskType} onChange={(_, newVal) => setTaskType(newVal)}>
+            <Tab label='Открытые' value='open' />
+            <Tab label='Завершенные' value='completed' />
           </Tabs>
         </Box>
         <Box sx={{ mt: '20px', display: 'flex', gap: '20px' }}>
-          {newTasks &&
-            newTasks.data
+          {tasks &&
+            tasks.data
               .filter(task => {
-                if (taskType === 'completed') {
-                  return date > new Date(task.attributes.finishDate);
-                }
+                const taskFinish = new Date(task.attributes.finishDate);
+                if (!task.attributes.finishDate) return true;
+                if (taskType === 'completed') return date < taskFinish;
+                if (taskType === 'open') return date > taskFinish;
               })
               .map(task => {
-                return <TaskCard {...task} />;
+                return (
+                  <TaskCard
+                    deadlineDate={task.attributes.finishDate}
+                    publicationDate={task.attributes.publishedAt}
+                    taskId={task.id}
+                    key={task.id}
+                    title={task.attributes.title}
+                    description={task.attributes.description}
+                  />
+                );
               })}
         </Box>
       </Box>

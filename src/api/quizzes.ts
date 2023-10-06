@@ -13,10 +13,11 @@ type TGetQuizzesResponse = {
   }[]
 }
 
-async function getQuizzes() : Promise<TGetQuizzesResponse>{
+async function getQuizzesByUser(id?:number) : Promise<TGetQuizzesResponse | undefined>{
+  if(!id) return
   return (await basicApi.get('/quizzesp')).data
 }
 
 export const quizzesApi = {
-  getQuizzes
+  getQuizzesByUser
 }
