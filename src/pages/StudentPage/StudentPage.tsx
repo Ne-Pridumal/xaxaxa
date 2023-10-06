@@ -1,6 +1,8 @@
 import { Box, Tab, Tabs, Typography } from '@mui/material';
-import { useMemo } from 'react';
-import { Header, TTaskCard, TaskCard } from '../../Components';
+import { useMemo, useState } from 'react';
+import { Header, TTaskCard, TaskCard } from '@/components';
+import { useQuery } from '@tanstack/react-query';
+import { quizzesApi } from '@/api';
 
 function getTasks(): TTaskCard[] {
   const date = new Date();
@@ -28,7 +30,12 @@ function getTasks(): TTaskCard[] {
 
 export const StudentPage = () => {
   const tasks = useMemo(() => getTasks(), []);
-  // const tasks = use
+  const date = new Date();
+  const { data: newTasks } = useQuery({
+    queryKey: ['quizzes'],
+    queryFn: () => quizzesApi.getQuizzes(),
+  });
+  const [taskType, setTaskType] = useState<'open' | 'completed'>('open');
   return (
     <>
       <Header />
@@ -50,9 +57,16 @@ export const StudentPage = () => {
           </Tabs>
         </Box>
         <Box sx={{ mt: '20px', display: 'flex', gap: '20px' }}>
-          {tasks.map(task => {
-            return <TaskCard {...task} />;
-          })}
+          {newTasks &&
+            newTasks.data
+              .filter(task => {
+                if (taskType === 'completed') {
+                  return date > new Date(task.attributes.finishDate);
+                }
+              })
+              .map(task => {
+                return <TaskCard {...task} />;
+              })}
         </Box>
       </Box>
     </>

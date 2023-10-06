@@ -8,6 +8,7 @@ import { QuizPage, StudentPage } from '@/pages';
 import { SnackbarProvider } from 'notistack';
 import { authApi } from './api';
 import { Login, Register } from '@/components';
+import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 
 const router = createBrowserRouter([
   {
@@ -20,7 +21,7 @@ const router = createBrowserRouter([
           .getCurrentUser({ access_token })
           .catch(() => null);
         if (currentUser) {
-          return {};
+          return null;
         }
       }
       return redirect('/signin');
@@ -39,7 +40,7 @@ const router = createBrowserRouter([
           return redirect('/');
         }
       }
-      return {};
+      return null;
     }, // jwt !exists || jwt !valid => pass
   },
   {
@@ -55,7 +56,7 @@ const router = createBrowserRouter([
           return redirect('/');
         }
       }
-      return {};
+      return null;
     }, // jwt !exists || jwt !valid => pass
   },
   {
@@ -68,7 +69,7 @@ const router = createBrowserRouter([
           .getCurrentUser({ access_token })
           .catch(() => null);
         if (currentUser) {
-          return {};
+          return null;
         }
       }
       return redirect('/signin');
@@ -76,13 +77,17 @@ const router = createBrowserRouter([
   },
 ]);
 
+const queryClient = new QueryClient();
+
 function App() {
   return (
     <>
-      <SnackbarProvider maxSnack={3}>
-        <RouterProvider router={router} />
-        <CssBaseline />
-      </SnackbarProvider>
+      <QueryClientProvider client={queryClient}>
+        <SnackbarProvider maxSnack={3}>
+          <RouterProvider router={router} />
+        </SnackbarProvider>
+      </QueryClientProvider>
+      <CssBaseline />
     </>
   );
 }
