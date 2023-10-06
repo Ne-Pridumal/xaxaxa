@@ -5,9 +5,9 @@ import {
   redirect,
 } from 'react-router-dom';
 import { QuizPage, StudentPage } from '@/pages';
-import { Login, Register } from '@/components';
 import { SnackbarProvider } from 'notistack';
 import { authApi } from './api';
+import { Login, Register } from '@/components';
 
 const router = createBrowserRouter([
   {
@@ -79,10 +79,10 @@ const router = createBrowserRouter([
 function App() {
   return (
     <>
-      <SnackbarProvider>
+      <SnackbarProvider maxSnack={3}>
         <RouterProvider router={router} />
+        <CssBaseline />
       </SnackbarProvider>
-      <CssBaseline />
     </>
   );
 }
