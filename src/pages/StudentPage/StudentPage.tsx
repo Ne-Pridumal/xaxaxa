@@ -23,7 +23,8 @@ export const StudentPage = () => {
   const date = new Date();
   const { data: tasks } = useQuery({
     queryKey: ['quizzes', userData?.id],
-    queryFn: () => quizzesApi.getQuizzesByUser(userData?.id),
+    queryFn: () =>
+      quizzesApi.getQuizzesByGroup({ id: userData?.group.id, access_token }),
   });
 
   const [taskType, setTaskType] = useState<'open' | 'completed'>('open');
