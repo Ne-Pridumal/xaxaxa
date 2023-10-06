@@ -31,14 +31,14 @@ export const StudentPage = () => {
   return (
     <>
       <Header />
-      <Box sx={{ px: '80px', mt: '20px', pt: '20px' }}>
+      <Box sx={{ px: "80px", mt: "20px", pt: "20px" }}>
         <Box
           sx={{
-            display: 'flex',
-            width: '100%',
+            display: "flex",
+            width: "100%",
           }}
         >
-          <Typography variant='h5' fontWeight={600}>
+          <Typography variant="h5" fontWeight={600}>
             Мои задания
           </Typography>
         </Box>

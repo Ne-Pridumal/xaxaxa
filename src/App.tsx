@@ -1,5 +1,5 @@
-import { Login, Register } from '@/components';
-import { QuizPage, StudentPage } from '@/pages';
+import { Login, Register } from './components';
+import { QuizPage, StatisticPage, StudentPage } from '@/pages';
 import { CssBaseline } from '@mui/material';
 import {
   RouterProvider,
@@ -10,10 +10,10 @@ import { authApi } from './api';
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: <StudentPage />,
     async loader() {
-      const access_token = localStorage.getItem('jwtToken');
+      const access_token = localStorage.getItem("jwtToken");
       if (access_token) {
         const currentUser = await authApi
           .getCurrentUser({ access_token })
@@ -22,46 +22,46 @@ const router = createBrowserRouter([
           return null;
         }
       }
-      return redirect('/signin');
+      return redirect("/signin");
     }, // jwt exists && jwt valid => pass
   },
   {
-    path: '/signin',
+    path: "/signin",
     element: <Login />,
     async loader() {
-      const access_token = localStorage.getItem('jwtToken');
+      const access_token = localStorage.getItem("jwtToken");
       if (access_token) {
         const currentUser = await authApi
           .getCurrentUser({ access_token })
           .catch(() => null);
         if (currentUser) {
-          return redirect('/');
+          return redirect("/");
         }
       }
       return null;
     }, // jwt !exists || jwt !valid => pass
   },
   {
-    path: '/signup',
+    path: "/signup",
     element: <Register />,
     async loader() {
-      const access_token = localStorage.getItem('jwtToken');
+      const access_token = localStorage.getItem("jwtToken");
       if (access_token) {
         const currentUser = await authApi
           .getCurrentUser({ access_token })
           .catch(() => null);
         if (currentUser) {
-          return redirect('/');
+          return redirect("/");
         }
       }
       return null;
     }, // jwt !exists || jwt !valid => pass
   },
   {
-    path: '/quiz-page',
+    path: "/quiz-page",
     element: <QuizPage />,
     async loader() {
-      const access_token = localStorage.getItem('jwtToken');
+      const access_token = localStorage.getItem("jwtToken");
       if (access_token) {
         const currentUser = await authApi
           .getCurrentUser({ access_token })
@@ -70,7 +70,23 @@ const router = createBrowserRouter([
           return null;
         }
       }
-      return redirect('/signin');
+      return redirect("/signin");
+    }, // jwt exists && jwt valid => pass
+  },
+  {
+    path: "/statistic-page",
+    element: <StatisticPage />,
+    async loader() {
+      const access_token = localStorage.getItem("jwtToken");
+      if (access_token) {
+        const currentUser = await authApi
+          .getCurrentUser({ access_token })
+          .catch(() => null);
+        if (currentUser) {
+          return null;
+        }
+      }
+      return redirect("/signin");
     }, // jwt exists && jwt valid => pass
   },
 ]);
